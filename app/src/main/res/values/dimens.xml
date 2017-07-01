@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="image_view_width">120dp</dimen>
+    <dimen name="component_height">140dp</dimen>
+    <dimen name="image_view_margin_right">10dp</dimen>
+    <dimen name="meta_data_padding_top">10dp</dimen>
+    <dimen name="meta_data_component_margin">10dp</dimen>
+</resources>
