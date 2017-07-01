@@ -1,33 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/movie_item_margin_bottom"
+    >
     <ImageView
         android:layout_width="@dimen/image_view_width"
         android:layout_height="@dimen/component_height"
         android:id="@+id/iv_movie_thumbnail"
-        android:layout_marginRight="@dimen/image_view_margin_right"
-        android:layout_marginEnd="@dimen/image_view_margin_right"
+        android:src="@drawable/default_placeholder_750x415"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
         />
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/component_height"
         android:orientation="vertical"
-        android:paddingTop="@dimen/meta_data_padding_top">
+        >
 
         <TextView
             android:id="@+id/tv_movie_title"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
-            android:layout_width="wrap_content"
+            android:textStyle="bold"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/meta_data_component_margin"
+            android:textSize="20sp"
+            android:text="IRON MAN 3: CIVIL WAR"
             />
         <TextView
             android:id="@+id/tv_release_date"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:layout_marginLeft="@dimen/meta_data_component_margin"
+            android:layout_marginBottom="@dimen/meta_data_component_margin"
             android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:text="June, 20 2017"
+            />
+        <RatingBar
             android:layout_width="wrap_content"
-            android:layout_margin="@dimen/meta_data_component_margin"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/meta_data_component_margin"
+            android:numStars="5"
+            android:rating="2.3"
+            android:isIndicator="true"
+            style="?android:attr/ratingBarStyleIndicator"
             />
     </LinearLayout>
 </LinearLayout>

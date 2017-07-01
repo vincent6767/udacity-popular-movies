@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Popular Movies</string>
+    <string name="dummy_text">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed molestie eros id nulla eleifend, at elementum lacus ultricies. Duis aliquet suscipit augue vitae porta. Nullam finibus mauris ut urna fermentum, in mollis ex elementum. Sed tempor tempus pretium. Duis sit amet euismod leo, et tincidunt magna. Nulla eget dapibus velit. Nulla facilisi. Mauris rhoncus lectus nulla. Aliquam sed turpis at mauris dictum tempus a ut erat.
+        Ut ligula justo, luctus vel porta non, ultrices vitae orci. Nulla ultrices urna semper aliquam molestie. Sed quis arcu rutrum, sagittis ligula in, lobortis diam. Morbi luctus enim et est pulvinar, nec ornare odio pharetra. Nam vestibulum posuere tellus, ut lobortis dolor convallis ac. Suspendisse potenti. Curabitur felis diam, finibus a hendrerit bibendum, bibendum id sapien. Vestibulum feugiat diam lobortis, feugiat lectus vitae, dapibus nibh. Etiam non convallis justo. Suspendisse egestas, est in tincidunt placerat, sapien massa rutrum velit, porttitor ultrices erat justo maximus risus. Vestibulum venenatis lacus eros, at semper libero mollis sit amet. Quisque condimentum vitae ex sed interdum. Aliquam cursus dictum nisl a pulvinar. Fusce vehicula rhoncus tellus, id gravida ex euismod et. In velit elit, posuere sit amet quam ac, venenatis pellentesque diam.
+    </string>
+    <string name="movie_detail_synopsis">Synopsis</string>
+    <string name="title_activity_movie_detail">MovieDetailActivity</string>
 </resources>

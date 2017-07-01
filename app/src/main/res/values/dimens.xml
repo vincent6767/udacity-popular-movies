@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="image_view_width">120dp</dimen>
-    <dimen name="component_height">140dp</dimen>
+    <dimen name="image_view_detail_height">160dp</dimen>
     <dimen name="image_view_margin_right">10dp</dimen>
-    <dimen name="meta_data_padding_top">10dp</dimen>
+    <dimen name="movie_item_margin_bottom">12dp</dimen>
+    <dimen name="component_height">150dp</dimen>
+    <dimen name="meta_data_padding_top">5dp</dimen>
     <dimen name="meta_data_component_margin">10dp</dimen>
+    <dimen name="movie_title">22sp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>
