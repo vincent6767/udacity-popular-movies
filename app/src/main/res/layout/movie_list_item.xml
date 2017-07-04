@@ -27,7 +27,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/meta_data_component_margin"
             android:textSize="20sp"
-            android:text="IRON MAN 3: CIVIL WAR"
             />
         <TextView
             android:id="@+id/tv_release_date"
@@ -36,16 +35,6 @@
             android:layout_marginBottom="@dimen/meta_data_component_margin"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:text="June, 20 2017"
-            />
-        <RatingBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/meta_data_component_margin"
-            android:numStars="5"
-            android:rating="2.3"
-            android:isIndicator="true"
-            style="?android:attr/ratingBarStyleIndicator"
             />
     </LinearLayout>
 </LinearLayout>

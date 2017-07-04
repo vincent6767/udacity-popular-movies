@@ -19,10 +19,13 @@ import java.util.ArrayList;
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
     private Context mContext;
     private ArrayList<Movie> mMovies;
+    private MovieAdapterOnClickHandler mClickHandler;
 
-    public MovieAdapter(Context context, ArrayList<Movie> movies) {
+
+    public MovieAdapter(Context context, ArrayList<Movie> movies, MovieAdapterOnClickHandler clickHandler) {
         this.mContext = context;
         this.mMovies = movies;
+        this.mClickHandler = clickHandler;
     }
 
     @Override
@@ -49,17 +52,30 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         notifyDataSetChanged();
     }
 
-    public class MovieViewHolder extends RecyclerView.ViewHolder {
+
+    interface MovieAdapterOnClickHandler {
+        void onClick(Movie movie);
+    }
+
+    public class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView iv_movie_thumbnail;
         TextView tv_movie_title;
         TextView tv_release_date;
 
         public MovieViewHolder(View itemView) {
             super(itemView);
-            //Cache all view components
+            // Cache all view components
             iv_movie_thumbnail = (ImageView) itemView.findViewById(R.id.iv_movie_thumbnail);
             tv_movie_title= (TextView) itemView.findViewById(R.id.tv_movie_title);
             tv_release_date= (TextView) itemView.findViewById(R.id.tv_release_date);
+
+            // Add listener to the view.
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            mClickHandler.onClick(mMovies.get(getAdapterPosition()));
         }
     }
 }

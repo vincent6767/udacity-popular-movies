@@ -11,7 +11,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/image_view_detail_height"
             android:layout_margin="@dimen/meta_data_component_margin"
-            android:id="@+id/iv_detail_movie_thumbnail_image"
+            android:id="@+id/iv_movie_detail_thumbnail_image"
             android:src="@drawable/default_placeholder_750x415"
             />
         <LinearLayout
@@ -39,7 +39,8 @@
             <RatingBar
                 android:id="@+id/movie_detail_rb_movie_user_rating"
                 android:isIndicator="true"
-                android:layout_gravity="center_horizontal"
+                android:numStars="@integer/num_of_stars"
+                style="?android:attr/ratingBarStyleIndicator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
