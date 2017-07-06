@@ -6,4 +6,6 @@
     </string>
     <string name="movie_detail_synopsis">Synopsis</string>
     <string name="title_activity_movie_detail">MovieDetailActivity</string>
+    <string name="action_sort_by_popularity">Sort by popularity</string>
+    <string name="action_sort_by_top_user_rated">Sort by top user rated</string>
 </resources>
