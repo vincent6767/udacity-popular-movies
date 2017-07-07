@@ -38,6 +38,7 @@
                 />
             <RatingBar
                 android:id="@+id/movie_detail_rb_movie_user_rating"
+                android:layout_gravity="center_horizontal"
                 android:isIndicator="true"
                 android:numStars="@integer/num_of_stars"
                 style="?android:attr/ratingBarStyleIndicator"

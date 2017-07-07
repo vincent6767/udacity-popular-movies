@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Created by vincent on 7/1/17.
@@ -36,8 +37,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     @Override
     public void onBindViewHolder(MovieViewHolder holder, int position) {
-        holder.tv_movie_title.setText(mMovies.get(position).getTitle());
-        holder.tv_release_date.setText(mMovies.get(position).getReleaseDate());
+        holder.tv_release_date.setText(String.valueOf(mMovies.get(position).getYearReleaseDate()));
         // Load image from URL and put it on ImageView
         Picasso.with(mContext).load(mMovies.get(position).getThumbnailImageUrl()).into(holder.iv_movie_thumbnail);
     }
@@ -59,16 +59,13 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     public class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView iv_movie_thumbnail;
-        TextView tv_movie_title;
         TextView tv_release_date;
 
         public MovieViewHolder(View itemView) {
             super(itemView);
             // Cache all view components
             iv_movie_thumbnail = (ImageView) itemView.findViewById(R.id.iv_movie_thumbnail);
-            tv_movie_title= (TextView) itemView.findViewById(R.id.tv_movie_title);
             tv_release_date= (TextView) itemView.findViewById(R.id.tv_release_date);
-
             // Add listener to the view.
             itemView.setOnClickListener(this);
         }

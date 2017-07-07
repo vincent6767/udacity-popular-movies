@@ -10,6 +10,8 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
+import java.util.Calendar;
+
 public class MovieDetailActivity extends AppCompatActivity {
 
     @Override
@@ -30,7 +32,7 @@ public class MovieDetailActivity extends AppCompatActivity {
                 // Populate the view
                 Movie movie = (new Gson()).fromJson(intentThatStartedThisActivity.getStringExtra(Intent.EXTRA_TEXT), Movie.class);
                 tvMovieTitle.setText(movie.getTitle());
-                tvReleaseDate.setText(movie.getReleaseDate());
+                tvReleaseDate.setText(Integer.toString(movie.getYearReleaseDate()));
                 rbUserRating.setRating(movie.getUserRating());
                 tvSynopsis.setText(movie.getSynopsis());
                 Picasso.with(getApplicationContext()).load(movie.getThumbnailImageUrl()).into(ivThumbnail);

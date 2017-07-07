@@ -2,8 +2,17 @@ package com.example.android.popularmovies;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
+
 public class Movie {
     private static final String TMDB_IMAGE_PATH = "http://image.tmdb.org/t/p/w185";
+    private static final String dateFormat = "yyyy-mm-dd";
 
     @SerializedName("title")
     private String title;
@@ -49,7 +58,23 @@ public class Movie {
     public String getReleaseDate() {
         return releaseDate;
     }
-
+    public int getYearReleaseDate() {
+        return getReleaseDateInCalendar().get(Calendar.YEAR);
+    }
+    public Calendar getReleaseDateInCalendar() {
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(getReleaseDateInDate());
+        return calendar;
+    }
+    private Date getReleaseDateInDate() {
+        DateFormat df = new SimpleDateFormat(dateFormat, Locale.CHINA);
+        try {
+            return df.parse(getReleaseDate());
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
     public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
     }
