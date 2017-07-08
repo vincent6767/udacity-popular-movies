@@ -3,6 +3,7 @@ package com.example.android.popularmovies;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -33,6 +34,9 @@ public class MovieDetailActivity extends AppCompatActivity {
                 Movie movie = (new Gson()).fromJson(intentThatStartedThisActivity.getStringExtra(Intent.EXTRA_TEXT), Movie.class);
                 tvMovieTitle.setText(movie.getTitle());
                 tvReleaseDate.setText(Integer.toString(movie.getYearReleaseDate()));
+
+                Log.d("Vote Average", Float.toString(movie.getUserRating()));
+
                 rbUserRating.setRating(movie.getUserRating());
                 tvSynopsis.setText(movie.getSynopsis());
                 Picasso.with(getApplicationContext()).load(movie.getThumbnailImageUrl()).into(ivThumbnail);

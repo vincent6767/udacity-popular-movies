@@ -1,5 +1,9 @@
 package com.example.android.popularmovies.themoviedb;
 
+import android.content.Context;
+
+import com.example.android.popularmovies.networkutils.ConnectivityInterceptor;
+
 import java.io.IOException;
 
 import okhttp3.HttpUrl;
@@ -19,11 +23,13 @@ public class TheMovieDB {
     private static final String QUERY_PARAM_NAME = "api_key";
     private String apiKey;
     private Retrofit retrofit;
+    private Context mContext;
 
     public TheMovieDB() {
     }
-    public TheMovieDB(String apiKey) {
+    public TheMovieDB(String apiKey, Context context) {
         this.apiKey = apiKey;
+        this.mContext = context;
     }
     protected Retrofit getRetrofit() {
         if (retrofit == null) {
@@ -41,9 +47,9 @@ public class TheMovieDB {
                         .build();
                 request = request.newBuilder().url(url).build();
                 return chain.proceed(request);
-
             }
-        }).build();
+        }).addInterceptor(new ConnectivityInterceptor(mContext))
+                .build();
         return new Retrofit.Builder().baseUrl(THE_MOVIE_DB_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client);

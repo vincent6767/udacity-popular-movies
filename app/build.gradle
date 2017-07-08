@@ -19,7 +19,7 @@ android {
     }
     buildTypes.each {
         // TODO: Don't forget to omit this API key.
-        it.buildConfigField "String", "THE_MOVIE_DB_APY_KEY", "\"d4bcd292b9d9c1f6ae3927d1de2266f7\""
+        it.buildConfigField "String", "THE_MOVIE_DB_APY_KEY", "INSERT YOUR OWN API KEY HERE"
     }
 }
 

@@ -9,6 +9,15 @@
         android:scrollbars="vertical"
         android:id="@+id/rv_movies"
         />
+    <TextView
+        android:id="@+id/tv_error_message"
+        android:layout_width="@dimen/tv_error_message_width"
+        android:layout_height="wrap_content"
+        android:text="@string/connectivity_error_message"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:visibility="invisible"
+        />
     <ProgressBar
         android:id="@+id/pb_loading_indicator"
         android:layout_height="42dp"
