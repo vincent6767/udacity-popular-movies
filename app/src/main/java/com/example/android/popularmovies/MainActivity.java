@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -60,11 +61,12 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         initService();
         // Initialize movies list.
         fetchMoviesData(mCurrentOption, DATA_OPERATION.SET);
+        Log.d("onCreate", "True");
     }
     private void initViews() {
         rvMoviesList = (RecyclerView) findViewById(R.id.rv_movies);
         rvMoviesList.setHasFixedSize(true);
-        int mNumberOfCols = 2;
+        int mNumberOfCols = getResources().getInteger(R.integer.gallery_columns);
         GridLayoutManager layoutManager = new GridLayoutManager(this, mNumberOfCols);
         rvMoviesList.setLayoutManager(layoutManager);
 
@@ -233,4 +235,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         intentToStartMovieDetailActivity.putExtra(Intent.EXTRA_TEXT, movieInString);
         startActivity(intentToStartMovieDetailActivity);
     }
+
+
 }
