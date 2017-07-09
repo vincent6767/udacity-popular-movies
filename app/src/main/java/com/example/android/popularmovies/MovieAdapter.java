@@ -1,26 +1,45 @@
 package com.example.android.popularmovies;
 
 import android.content.Context;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by vincent on 7/1/17.
  */
 
-public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
+public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private enum VIEW_TYPE{
+        VIEW_ITEM(1), VIEW_PROG(0);
+        private int numVal;
+        VIEW_TYPE(int numVal) {
+            this.numVal = numVal;
+        }
+        public int getNumVal() {
+            return numVal;
+        }
+
+    }
+
+    private int visibileThreshold = 5;
+    private int lastVisibleItem, totalitemCount;
+    private boolean mLoading;
     private Context mContext;
     private ArrayList<Movie> mMovies;
     private MovieAdapterOnClickHandler mClickHandler;
+    private OnLoadMoreListener mOnLoadMoreListener;
 
 
     public MovieAdapter(Context context, ArrayList<Movie> movies, MovieAdapterOnClickHandler clickHandler) {
@@ -28,18 +47,56 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         this.mMovies = movies;
         this.mClickHandler = clickHandler;
     }
-
-    @Override
-    public MovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.movie_list_item, parent, false);
-        return new MovieViewHolder(view);
+    public MovieAdapter(Context context, ArrayList<Movie> movies, MovieAdapterOnClickHandler clickHandler, RecyclerView rv) {
+        this(context, movies, clickHandler);
+        if (rv.getLayoutManager() instanceof GridLayoutManager) {
+            final GridLayoutManager layoutManager = (GridLayoutManager) rv.getLayoutManager();
+            rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    totalitemCount = layoutManager.getItemCount();
+                    lastVisibleItem = layoutManager.findLastVisibleItemPosition();
+                    // Load more should only run if there are Movies inside it, in not loading state,
+                    // and the total item count is less than last visible item + visible threshold.
+                    if (mMovies != null && !mLoading && totalitemCount <= (lastVisibleItem + visibileThreshold)) {
+                        // End has been reached
+                        if (mOnLoadMoreListener != null) {
+                            mOnLoadMoreListener.onLoadMore();
+                        }
+                        mLoading = true;
+                    }
+                }
+            });
+        }
     }
 
     @Override
-    public void onBindViewHolder(MovieViewHolder holder, int position) {
-        holder.tv_release_date.setText(String.valueOf(mMovies.get(position).getYearReleaseDate()));
-        // Load image from URL and put it on ImageView
-        Picasso.with(mContext).load(mMovies.get(position).getThumbnailImageUrl()).into(holder.iv_movie_thumbnail);
+    public int getItemViewType(int position) {
+        return mMovies.get(position) != null ? VIEW_TYPE.VIEW_ITEM.getNumVal() : VIEW_TYPE.VIEW_PROG.getNumVal();
+    }
+
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        RecyclerView.ViewHolder viewHolder;
+        if (viewType == VIEW_TYPE.VIEW_ITEM.getNumVal()) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.movie_list_item, parent, false);
+            viewHolder = new MovieViewHolder(view);
+        } else {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.progressbar, parent, false);
+            viewHolder = new ProgressViewHolder(view);
+        }
+        return viewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof MovieViewHolder) {
+            ((MovieViewHolder) holder).tv_release_date.setText(String.valueOf(mMovies.get(position).getYearReleaseDate()));
+            Picasso.with(mContext).load(mMovies.get(position).getThumbnailImageUrl()).into(((MovieViewHolder) holder).iv_movie_thumbnail);
+        } else if (holder instanceof ProgressViewHolder) {
+            ((ProgressViewHolder) holder).pv_load_more_indicator.setIndeterminate(true);
+        }
     }
 
     @Override
@@ -47,11 +104,34 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         return (mMovies == null) ? 0 : mMovies.size();
     }
 
+    public void setLoaded() {
+        mLoading = false;
+    }
+
+    public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
+        this.mOnLoadMoreListener = onLoadMoreListener;
+    }
+
     public void setMovieData(ArrayList<Movie> movies) {
         mMovies = movies;
         notifyDataSetChanged();
     }
-
+    public void addMovieData(Movie movie) {
+        mMovies.add(movie);
+        notifyItemInserted(mMovies.size() - 1);
+    }
+    public void addMovies(List<Movie> movies) {
+        for (Movie movie : movies) {
+            addMovieData(movie);
+        }
+    }
+    public void removeMoviesData(int position) {
+        if (position > mMovies.size() || position < 0) {
+            throw new IllegalArgumentException();
+        }
+        mMovies.remove(position);
+        notifyItemRemoved(mMovies.size());
+    }
 
     interface MovieAdapterOnClickHandler {
         void onClick(Movie movie);
@@ -73,6 +153,14 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         @Override
         public void onClick(View view) {
             mClickHandler.onClick(mMovies.get(getAdapterPosition()));
+        }
+    }
+
+    private class ProgressViewHolder extends RecyclerView.ViewHolder {
+        ProgressBar pv_load_more_indicator;
+        public ProgressViewHolder(View view) {
+            super(view);
+            pv_load_more_indicator = (ProgressBar) view.findViewById(R.id.pb_load_more_indicator);
         }
     }
 }

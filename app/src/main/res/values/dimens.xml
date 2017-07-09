@@ -12,4 +12,5 @@
     <dimen name="release_date">18sp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="tv_error_message_width">190dp</dimen>
+    <dimen name="movie_card_corner_radius">5dp</dimen>
 </resources>
