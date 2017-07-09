@@ -16,7 +16,6 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/thumbnail_height"
             android:id="@+id/iv_movie_thumbnail"
-            android:src="@drawable/default_placeholder_750x415"
             />
         <TextView
             android:id="@+id/tv_release_date"
@@ -27,7 +26,6 @@
             android:layout_width="match_parent"
             android:textSize="@dimen/release_date"
             android:textStyle="bold"
-            android:text="Hello there!"
             />
     </RelativeLayout>
 </android.support.v7.widget.CardView>

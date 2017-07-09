@@ -3,13 +3,8 @@ package com.example.android.popularmovies;
 import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
-
-/**
- * Created by vincent on 7/7/17.
- */
 
 public class VarColumnGridLayoutManager extends GridLayoutManager {
 
@@ -25,7 +20,7 @@ public class VarColumnGridLayoutManager extends GridLayoutManager {
         super(context, spanCount, orientation, reverseLayout);
     }
 
-    private int[] mMeasuredDimension = new int[2];
+    private final int[] mMeasuredDimension = new int[2];
 
     @Override
     public void onMeasure(RecyclerView.Recycler recycler, RecyclerView.State state,

@@ -2,12 +2,10 @@ package com.example.android.popularmovies;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,7 +27,7 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler {
     private enum SORT_OPTION {
-        POPULARITY, TOP_RATED;
+        POPULARITY, TOP_RATED
     }
     private enum DATA_OPERATION {
         ADD, SET
@@ -41,7 +39,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private SORT_OPTION mCurrentOption;
 
     private MovieAdapter mAdapter;
-    private TheMovieDB theMovieDB;
     private MoviesService moviesService;
     private ProgressBar pbLoadingIndicator;
     private TextView tvErrorMessage;
@@ -70,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         GridLayoutManager layoutManager = new GridLayoutManager(this, mNumberOfCols);
         rvMoviesList.setLayoutManager(layoutManager);
 
-        @SuppressWarnings("unchecked") ArrayList<Movie> movies = new ArrayList<Movie>();
+        @SuppressWarnings("unchecked") ArrayList<Movie> movies = new ArrayList<>();
 
         mAdapter = new MovieAdapter(getApplicationContext(), movies, this, rvMoviesList);
         rvMoviesList.setAdapter(mAdapter);
@@ -87,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         });
     }
     private void initService() {
-        theMovieDB = new TheMovieDB(BuildConfig.THE_MOVIE_DB_APY_KEY, this);
+        TheMovieDB theMovieDB = new TheMovieDB(BuildConfig.THE_MOVIE_DB_APY_KEY, this);
         moviesService = theMovieDB.getMoviesService();
     }
 
@@ -157,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         rvMoviesList.setVisibility(View.INVISIBLE);
     }
 
-    public void onConnectivityException() {
+    private void onConnectivityException() {
         // This has need to be done because
         // a thread cannot update UI that is not created by that UI
         runOnUiThread(new Runnable() {

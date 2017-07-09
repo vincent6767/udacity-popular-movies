@@ -14,10 +14,6 @@ import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-/**
- * Created by vincent on 7/5/17.
- */
-
 public class TheMovieDB {
     private static final String THE_MOVIE_DB_BASE_URL = "http://api.themoviedb.org/3/";
     private static final String QUERY_PARAM_NAME = "api_key";
@@ -25,8 +21,6 @@ public class TheMovieDB {
     private Retrofit retrofit;
     private Context mContext;
 
-    public TheMovieDB() {
-    }
     public TheMovieDB(String apiKey, Context context) {
         this.apiKey = apiKey;
         this.mContext = context;

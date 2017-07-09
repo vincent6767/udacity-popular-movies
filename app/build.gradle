@@ -18,7 +18,6 @@ android {
         }
     }
     buildTypes.each {
-        // TODO: Don't forget to omit this API key.
         it.buildConfigField "String", "THE_MOVIE_DB_APY_KEY", "INSERT YOUR OWN API KEY HERE"
     }
 }
@@ -40,6 +39,6 @@ dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.2.0'
     compile 'com.squareup.retrofit2:converter-gson:2.2.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.google.code.gson:gson:2.6.2'
+    compile 'com.google.code.gson:gson:2.7'
     testCompile 'junit:junit:4.12'
 }

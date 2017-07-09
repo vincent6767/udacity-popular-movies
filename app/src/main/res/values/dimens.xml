@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="thumbnail_width">160dp</dimen>
     <dimen name="thumbnail_height">170dp</dimen>
     <dimen name="image_view_detail_height">160dp</dimen>
-    <dimen name="image_view_margin_right">10dp</dimen>
-    <dimen name="movie_item_margin">12dp</dimen>
-    <dimen name="component_height">200dp</dimen>
-    <dimen name="meta_data_padding_top">5dp</dimen>
     <dimen name="meta_data_component_margin">10dp</dimen>
     <dimen name="movie_title">22sp</dimen>
     <dimen name="release_date">18sp</dimen>
-    <dimen name="fab_margin">16dp</dimen>
     <dimen name="tv_error_message_width">190dp</dimen>
     <dimen name="movie_card_corner_radius">5dp</dimen>
 </resources>

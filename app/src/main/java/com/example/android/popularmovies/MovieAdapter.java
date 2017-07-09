@@ -3,7 +3,6 @@ package com.example.android.popularmovies;
 import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +14,6 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
-
-/**
- * Created by vincent on 7/1/17.
- */
 
 public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private enum VIEW_TYPE{
@@ -33,7 +28,7 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     }
 
-    private int visibileThreshold = 5;
+    private int visibleThreshold = 5;
     private int lastVisibleItem, totalitemCount;
     private boolean mLoading;
     private Context mContext;
@@ -59,7 +54,7 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     lastVisibleItem = layoutManager.findLastVisibleItemPosition();
                     // Load more should only run if there are Movies inside it, in not loading state,
                     // and the total item count is less than last visible item + visible threshold.
-                    if (mMovies != null && !mLoading && totalitemCount <= (lastVisibleItem + visibileThreshold)) {
+                    if (mMovies != null && !mLoading && totalitemCount <= (lastVisibleItem + visibleThreshold)) {
                         // End has been reached
                         if (mOnLoadMoreListener != null) {
                             mOnLoadMoreListener.onLoadMore();
@@ -144,8 +139,8 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         public MovieViewHolder(View itemView) {
             super(itemView);
             // Cache all view components
-            iv_movie_thumbnail = (ImageView) itemView.findViewById(R.id.iv_movie_thumbnail);
-            tv_release_date= (TextView) itemView.findViewById(R.id.tv_release_date);
+            iv_movie_thumbnail = itemView.findViewById(R.id.iv_movie_thumbnail);
+            tv_release_date= itemView.findViewById(R.id.tv_release_date);
             // Add listener to the view.
             itemView.setOnClickListener(this);
         }
@@ -160,7 +155,7 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         ProgressBar pv_load_more_indicator;
         public ProgressViewHolder(View view) {
             super(view);
-            pv_load_more_indicator = (ProgressBar) view.findViewById(R.id.pb_load_more_indicator);
+            pv_load_more_indicator = view.findViewById(R.id.pb_load_more_indicator);
         }
     }
 }

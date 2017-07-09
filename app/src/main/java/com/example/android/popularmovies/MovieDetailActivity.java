@@ -1,9 +1,9 @@
 package com.example.android.popularmovies;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
-import java.util.Calendar;
+import java.util.Locale;
 
 public class MovieDetailActivity extends AppCompatActivity {
 
@@ -33,9 +33,7 @@ public class MovieDetailActivity extends AppCompatActivity {
                 // Populate the view
                 Movie movie = (new Gson()).fromJson(intentThatStartedThisActivity.getStringExtra(Intent.EXTRA_TEXT), Movie.class);
                 tvMovieTitle.setText(movie.getTitle());
-                tvReleaseDate.setText(Integer.toString(movie.getYearReleaseDate()));
-
-                Log.d("Vote Average", Float.toString(movie.getUserRating()));
+                tvReleaseDate.setText(String.format(Locale.US, "%d", movie.getYearReleaseDate()));
 
                 rbUserRating.setRating(movie.getUserRating());
                 tvSynopsis.setText(movie.getSynopsis());

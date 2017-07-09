@@ -6,13 +6,12 @@
     >
     <LinearLayout
         android:orientation="vertical" android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="@dimen/image_view_detail_height"
             android:layout_margin="@dimen/meta_data_component_margin"
             android:id="@+id/iv_movie_detail_thumbnail_image"
-            android:src="@drawable/default_placeholder_750x415"
             />
         <LinearLayout
             android:layout_width="match_parent"
@@ -28,7 +27,6 @@
                 android:gravity="center"
                 android:textSize="@dimen/movie_title"
                 android:id="@+id/movie_detail_tv_movie_title"
-                android:text="Iron Man 3: Civil War"
                 />
             <TextView
                 android:layout_width="match_parent"
@@ -36,7 +34,6 @@
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                 android:gravity="center_horizontal"
                 android:id="@+id/movie_detail_tv_release_date"
-                android:text="2017"
                 />
 
             <RatingBar
