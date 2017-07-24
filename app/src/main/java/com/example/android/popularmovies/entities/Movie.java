@@ -1,4 +1,4 @@
-package com.example.android.popularmovies;
+package com.example.android.popularmovies.entities;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -14,6 +14,7 @@ public class Movie {
     private static final String TMDB_IMAGE_PATH = "http://image.tmdb.org/t/p/w185";
     private static final String dateFormat = "yyyy-mm-dd";
 
+    private Integer id;
     @SerializedName("title")
     private String title;
     @SerializedName("poster_path")
@@ -93,5 +94,9 @@ public class Movie {
 
     public void setBackdrop(String backdrop) {
         this.backdrop = backdrop;
+    }
+
+    public int getId() {
+        return id;
     }
 }

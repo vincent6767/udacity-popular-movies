@@ -13,8 +13,9 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.android.popularmovies.entities.Movie;
 import com.example.android.popularmovies.networkutils.NoConnectivityException;
-import com.example.android.popularmovies.themoviedb.MovieResult;
+import com.example.android.popularmovies.entities.MovieResult;
 import com.example.android.popularmovies.themoviedb.MoviesService;
 import com.example.android.popularmovies.themoviedb.TheMovieDB;
 import com.google.gson.Gson;
@@ -58,7 +59,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         initService();
         // Initialize movies list.
         fetchMoviesData(mCurrentOption, DATA_OPERATION.SET);
-        Log.d("onCreate", "True");
     }
     private void initViews() {
         rvMoviesList = (RecyclerView) findViewById(R.id.rv_movies);

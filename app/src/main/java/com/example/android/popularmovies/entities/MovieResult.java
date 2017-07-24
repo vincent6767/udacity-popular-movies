@@ -1,6 +1,4 @@
-package com.example.android.popularmovies.themoviedb;
-
-import com.example.android.popularmovies.Movie;
+package com.example.android.popularmovies.entities;
 
 import java.util.ArrayList;
 
