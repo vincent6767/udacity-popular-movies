@@ -62,5 +62,24 @@
                 android:gravity="fill_horizontal"
                 />
         </LinearLayout>
+        <TextView
+            android:text="@string/movie_detail_reviews_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/movie_title"
+            android:gravity="center_horizontal"
+            android:textStyle="bold"
+            android:layout_margin="@dimen/meta_data_component_margin"
+            />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_movie_reviews"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none"
+                />
+        </FrameLayout>
     </LinearLayout>
 </ScrollView>

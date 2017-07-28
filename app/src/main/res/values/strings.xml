@@ -9,4 +9,5 @@
     <string name="action_sort_by_popularity">Sort by most popular</string>
     <string name="action_sort_by_top_user_rated">Sort by highest rated</string>
     <string name="connectivity_error_message">We cannot connect to the internet. Please make sure that you have connectivity to the internet.</string>
+    <string name="movie_detail_reviews_title">Reviews</string>
 </resources>

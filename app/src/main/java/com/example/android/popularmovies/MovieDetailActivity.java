@@ -3,12 +3,15 @@ package com.example.android.popularmovies;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.popularmovies.adapterviews.ReviewsAdapter;
 import com.example.android.popularmovies.entities.Movie;
 import com.example.android.popularmovies.entities.Review;
 import com.example.android.popularmovies.entities.ReviewsResult;
@@ -18,6 +21,7 @@ import com.example.android.popularmovies.themoviedb.TheMovieDB;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 import retrofit2.Call;
@@ -29,6 +33,8 @@ public class MovieDetailActivity extends AppCompatActivity {
     private static final String NETWORK_ERROR = "Oops. Seems like we encountered network error.";
     // TODO: Don't forget to add page for your reviews.
     private MoviesService mMovieService;
+    private RecyclerView mReviewsRecyclerView;
+    private ReviewsAdapter mReviewsAdapter;
     private Movie mMovie;
 
     @Override
@@ -37,7 +43,6 @@ public class MovieDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_movie_detail);
 
         Intent intentThatStartedThisActivity = getIntent();
-
         if (intentThatStartedThisActivity != null) {
             if (intentThatStartedThisActivity.hasExtra(Intent.EXTRA_TEXT)) {
                 TextView tvMovieTitle = (TextView) findViewById(R.id.movie_detail_tv_movie_title);
@@ -55,12 +60,22 @@ public class MovieDetailActivity extends AppCompatActivity {
                 tvSynopsis.setText(mMovie.getSynopsis());
                 Picasso.with(getApplicationContext()).load(mMovie.getThumbnailImageUrl()).into(ivThumbnail);
 
-
+                initViews();
                 initService();
                 initializeReviews();
             }
         }
         // Do nothing if there no movie is passed.
+    }
+
+    private void initViews() {
+        mReviewsRecyclerView = (RecyclerView) findViewById(R.id.rv_movie_reviews);
+        mReviewsRecyclerView.setHasFixedSize(true);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        mReviewsRecyclerView.setLayoutManager(layoutManager);
+
+        mReviewsAdapter = new ReviewsAdapter(this, new ArrayList<Review>());
+        mReviewsRecyclerView.setAdapter(mReviewsAdapter);
     }
 
     private void initService() {
@@ -73,11 +88,7 @@ public class MovieDetailActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ReviewsResult> call, Response<ReviewsResult> response) {
                 ReviewsResult reviewsResult = response.body();
-                Log.v(LOG_TAG, reviewsResult.getId().toString());
-                for (Review review: reviewsResult.getResults()) {
-                    // TODO: Add your content to a layout.
-                    Log.v(LOG_TAG, "Content: " + review.getContent());
-                }
+                mReviewsAdapter.setReviews(reviewsResult.getResults());
             }
 
             @Override
