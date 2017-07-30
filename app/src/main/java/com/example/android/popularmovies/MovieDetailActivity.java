@@ -1,12 +1,23 @@
 package com.example.android.popularmovies;
 
 import android.content.ActivityNotFoundException;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.app.NavUtils;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -32,11 +43,27 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MovieDetailActivity extends AppCompatActivity implements VideosAdapter.VideoAdapterOnClickHandler{
+import com.example.android.popularmovies.data.FavoriteMoviesContract.FavoriteMoviesEntry;
+
+public class MovieDetailActivity extends AppCompatActivity implements
+        VideosAdapter.VideoAdapterOnClickHandler,
+        LoaderManager.LoaderCallbacks<Cursor>
+{
     private static final String LOG_TAG = MovieDetailActivity.class.getSimpleName();
     private static final String NETWORK_ERROR = "Oops. Seems like we encountered network error.";
+    private static final int ID_MOVIE_LOADER = 44;
 
-    // TODO: Don't forget to add page for your reviews.
+    private boolean mMovieSaveState;
+
+    private MenuItem mBookmarkMenuItem;
+
+    private static final String[] DETAIL_FAVORITE_MOVIES_PROJECTION = {
+            FavoriteMoviesEntry.COLUMN_ID,
+            FavoriteMoviesEntry.COLUMN_TITLE
+    };
+    private static final int INDEX_MOVIE_ID = 0;
+    private static final int INDEX_MOVIE_TITLE = 1;
+
     private MoviesService mMovieService;
     private RecyclerView mReviewsRecyclerView;
     private ReviewsAdapter mReviewsAdapter;
@@ -48,6 +75,7 @@ public class MovieDetailActivity extends AppCompatActivity implements VideosAdap
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
+        ActionBar bar = getSupportActionBar();
 
         Intent intentThatStartedThisActivity = getIntent();
         if (intentThatStartedThisActivity != null) {
@@ -67,6 +95,7 @@ public class MovieDetailActivity extends AppCompatActivity implements VideosAdap
                 rbUserRating.setRating(mMovie.getUserRating());
                 tvSynopsis.setText(mMovie.getSynopsis());
                 Picasso.with(getApplicationContext()).load(mMovie.getThumbnailImageUrl()).into(ivThumbnail);
+                bar.setTitle(mMovie.getTitle());
 
                 initViews();
                 initService();
@@ -74,9 +103,11 @@ public class MovieDetailActivity extends AppCompatActivity implements VideosAdap
                 initializeVideos();
             }
         }
+        if (bar != null) {
+            bar.setDisplayHomeAsUpEnabled(true);
+        }
         // Do nothing if there no movie is passed.
     }
-
     private void initViews() {
         LinearLayoutManager reviewsLayoutManager = new LinearLayoutManager(this);
         mReviewsRecyclerView = (RecyclerView) findViewById(R.id.rv_movie_reviews);
@@ -145,6 +176,72 @@ public class MovieDetailActivity extends AppCompatActivity implements VideosAdap
         // TODO: Show error message in the box.
         Toast.makeText(this, errMessage, Toast.LENGTH_LONG).show();
     }
+    private void updateBookmarkMenuItem(boolean saveState) {
+        if (saveState) {
+            mBookmarkMenuItem.setIcon(R.drawable.ic_action_unbookmark);
+        } else {
+            mBookmarkMenuItem.setIcon(R.drawable.ic_action_bookmark);
+        }
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.movie, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        mBookmarkMenuItem = menu.findItem(R.id.action_bookmark);
+        getSupportLoaderManager().initLoader(ID_MOVIE_LOADER, null, this);
+        return super.onPrepareOptionsMenu(menu);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.action_bookmark:
+                if (mMovieSaveState) {
+                    // Saved
+                    removeFavoriteMovie();
+                } else {
+                    // Not save yet
+                    saveFavoriteMovie();
+                }
+                return true;
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void saveFavoriteMovie() {
+        ContentValues values = new ContentValues();
+        values.put(FavoriteMoviesEntry.COLUMN_ID, mMovie.getId());
+        values.put(FavoriteMoviesEntry.COLUMN_TITLE, mMovie.getTitle());
+
+        Uri movieUri = FavoriteMoviesEntry.CONTENT_URI;
+
+        Uri newMovieUri = getContentResolver().insert(movieUri, values);
+        mMovieSaveState = true;
+        if (newMovieUri != null) {
+            Toast.makeText(getBaseContext(), "Successfully saved movie to your collection!", Toast.LENGTH_SHORT).show();
+        }
+        updateBookmarkMenuItem(mMovieSaveState);
+    }
+
+    private void removeFavoriteMovie() {
+        Uri movieUri = FavoriteMoviesEntry.CONTENT_URI.buildUpon().appendPath(String.valueOf(mMovie.getId())).build();
+
+        int removedMovie = getContentResolver().delete(movieUri, null, null);
+        if (removedMovie > 0) {
+            Toast.makeText(getBaseContext(), "Successfully remove movie from your collection!", Toast.LENGTH_SHORT).show();
+        }
+        mMovieSaveState = false;
+        updateBookmarkMenuItem(mMovieSaveState);
+    }
 
     @Override
     public void onClick(Video video) {
@@ -156,5 +253,45 @@ public class MovieDetailActivity extends AppCompatActivity implements VideosAdap
                 Log.e(LOG_TAG, "Cannot found application to open video");
             }
         }
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        switch (id) {
+            case ID_MOVIE_LOADER:
+                Uri movieUri = FavoriteMoviesEntry.CONTENT_URI.buildUpon().appendPath(String.valueOf(mMovie.getId())).build();
+                String selection = FavoriteMoviesEntry.getSqlSelectForAMovie();
+                String[] selectionArgs = new String[] {String.valueOf(mMovie.getId())};
+                return new CursorLoader(
+                        this,
+                        movieUri,
+                        DETAIL_FAVORITE_MOVIES_PROJECTION,
+                        selection,
+                        selectionArgs,
+                        null
+                );
+            default:
+                throw new RuntimeException("Loader not implemented: " + id);
+        }
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        int loaderId = loader.getId();
+
+        switch (loaderId) {
+            case ID_MOVIE_LOADER:
+                // check if the movie is saved
+                mMovieSaveState = data.getCount() > 0;
+                updateBookmarkMenuItem(mMovieSaveState);
+                break;
+            default:
+                throw new RuntimeException("Unknown loader: " + loader);
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        // Do nothing here
     }
 }

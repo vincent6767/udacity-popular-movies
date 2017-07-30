@@ -11,4 +11,5 @@
     <string name="connectivity_error_message">We cannot connect to the internet. Please make sure that you have connectivity to the internet.</string>
     <string name="movie_detail_reviews_title">Reviews</string>
     <string name="movie_detail_trailers_title">Trailers</string>
+    <string name="action_bookmark">Bookmark</string>
 </resources>
