@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.android.popularmovies.adapterviews.MovieAdapter;
+import com.example.android.popularmovies.listeners.OnLoadMoreListener;
 import com.example.android.popularmovies.entities.Movie;
 import com.example.android.popularmovies.networkutils.NoConnectivityException;
 import com.example.android.popularmovies.entities.MovieResult;

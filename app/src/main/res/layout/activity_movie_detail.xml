@@ -63,13 +63,23 @@
                 />
         </LinearLayout>
         <TextView
-            android:text="@string/movie_detail_reviews_title"
+            style="@style/TitleTextView"
+            android:text="@string/movie_detail_trailers_title"
+            />
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/movie_title"
-            android:gravity="center_horizontal"
-            android:textStyle="bold"
-            android:layout_margin="@dimen/meta_data_component_margin"
+            android:layout_height="match_parent">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_movie_trailers"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none"
+                />
+        </FrameLayout>
+
+        <TextView
+            style="@style/TitleTextView"
+            android:text="@string/movie_detail_reviews_title"
             />
         <FrameLayout
             android:layout_width="match_parent"

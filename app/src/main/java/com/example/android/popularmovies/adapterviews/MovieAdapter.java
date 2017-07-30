@@ -1,4 +1,4 @@
-package com.example.android.popularmovies;
+package com.example.android.popularmovies.adapterviews;
 
 import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.android.popularmovies.listeners.OnLoadMoreListener;
+import com.example.android.popularmovies.R;
 import com.example.android.popularmovies.entities.Movie;
 import com.squareup.picasso.Picasso;
 
@@ -129,7 +131,7 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         notifyItemRemoved(mMovies.size());
     }
 
-    interface MovieAdapterOnClickHandler {
+    public interface MovieAdapterOnClickHandler {
         void onClick(Movie movie);
     }
 
