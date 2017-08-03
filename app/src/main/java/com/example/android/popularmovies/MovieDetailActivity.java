@@ -14,7 +14,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -94,7 +93,7 @@ public class MovieDetailActivity extends AppCompatActivity implements
 
                 rbUserRating.setRating(mMovie.getUserRating());
                 tvSynopsis.setText(mMovie.getSynopsis());
-                Picasso.with(getApplicationContext()).load(mMovie.getThumbnailImageUrl()).into(ivThumbnail);
+                Picasso.with(getApplicationContext()).load(mMovie.getFullThumbnailImageUrl()).into(ivThumbnail);
                 bar.setTitle(mMovie.getTitle());
 
                 initViews();
@@ -221,6 +220,11 @@ public class MovieDetailActivity extends AppCompatActivity implements
         ContentValues values = new ContentValues();
         values.put(FavoriteMoviesEntry.COLUMN_ID, mMovie.getId());
         values.put(FavoriteMoviesEntry.COLUMN_TITLE, mMovie.getTitle());
+        values.put(FavoriteMoviesEntry.COLUMN_RELEASE_DATE, mMovie.getReleaseDate());
+        values.put(FavoriteMoviesEntry.COLUMN_POSTER_PATH, mMovie.getThumbnailImageUrl());
+        values.put(FavoriteMoviesEntry.COLUMN_USER_RATING, mMovie.getUserRating());
+        values.put(FavoriteMoviesEntry.COLUMN_SYNOPSIS, mMovie.getSynopsis());
+        values.put(FavoriteMoviesEntry.COLUMN_BACKDROP, mMovie.getBackdrop());
 
         Uri movieUri = FavoriteMoviesEntry.CONTENT_URI;
 

@@ -1,5 +1,6 @@
 package com.example.android.popularmovies.themoviedb;
 
+import com.example.android.popularmovies.entities.Movie;
 import com.example.android.popularmovies.entities.MovieResult;
 import com.example.android.popularmovies.entities.ReviewsResult;
 import com.example.android.popularmovies.entities.VideosResult;
@@ -25,6 +26,13 @@ public interface MoviesService {
     Call<MovieResult> getTopRated(
             @Query("page") Integer page
     );
+    /*
+    * Get the movie for a particula movie id.
+    *
+    * @param movieId A movie TMDb id.
+    * */
+    @GET("movie/{movie_id}")
+    Call<Movie> getMovie(@Path("movie_id") int movieId);
     /**
      * Get the reviews for a particular movie id.
      *

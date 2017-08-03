@@ -31,6 +31,15 @@ public class Movie {
     public Movie() {
         super();
     }
+    public Movie(int id, String title, String thumbnailImageUrl, String releaseDate, float userRating, String synopsis, String backdrop) {
+        this.id = id;
+        this.title = title;
+        this.thumbnailImageUrl = thumbnailImageUrl;
+        this.releaseDate = releaseDate;
+        this.userRating = userRating;
+        this.synopsis = synopsis;
+        this.backdrop = backdrop;
+    }
 
     public String getTitle() {
         return title;
@@ -40,10 +49,12 @@ public class Movie {
         this.title = title;
     }
 
-    public String getThumbnailImageUrl() {
+    public String getFullThumbnailImageUrl() {
         return TMDB_IMAGE_PATH + thumbnailImageUrl;
     }
-
+    public String getThumbnailImageUrl() {
+        return thumbnailImageUrl;
+    }
     public void setThumbnailImageUrl(String thumbnailImageUrl) {
         this.thumbnailImageUrl = thumbnailImageUrl;
     }
@@ -87,8 +98,10 @@ public class Movie {
     public void setSynopsis(String synopsis) {
         this.synopsis = synopsis;
     }
-
     public String getBackdrop() {
+        return backdrop;
+    }
+    public String getFullBackdrop() {
         return TMDB_IMAGE_PATH + backdrop;
     }
 

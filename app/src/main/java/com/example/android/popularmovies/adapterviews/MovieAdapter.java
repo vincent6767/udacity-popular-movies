@@ -35,9 +35,11 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private int lastVisibleItem, totalitemCount;
     private boolean mLoading;
     private Context mContext;
-    private ArrayList<Movie> mMovies;
+    private List<Movie> mMovies;
     private MovieAdapterOnClickHandler mClickHandler;
     private OnLoadMoreListener mOnLoadMoreListener;
+    private RecyclerView mMoviesListView;
+    private RecyclerView.OnScrollListener mOnScrollListener;
 
 
     public MovieAdapter(Context context, ArrayList<Movie> movies, MovieAdapterOnClickHandler clickHandler) {
@@ -47,9 +49,10 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
     public MovieAdapter(Context context, ArrayList<Movie> movies, MovieAdapterOnClickHandler clickHandler, RecyclerView rv) {
         this(context, movies, clickHandler);
+        mMoviesListView = rv;
         if (rv.getLayoutManager() instanceof GridLayoutManager) {
             final GridLayoutManager layoutManager = (GridLayoutManager) rv.getLayoutManager();
-            rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            rv.addOnScrollListener(mOnScrollListener = new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
@@ -91,7 +94,7 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof MovieViewHolder) {
             ((MovieViewHolder) holder).tv_release_date.setText(String.valueOf(mMovies.get(position).getYearReleaseDate()));
-            Picasso.with(mContext).load(mMovies.get(position).getThumbnailImageUrl()).into(((MovieViewHolder) holder).iv_movie_thumbnail);
+            Picasso.with(mContext).load(mMovies.get(position).getFullThumbnailImageUrl()).into(((MovieViewHolder) holder).iv_movie_thumbnail);
         } else if (holder instanceof ProgressViewHolder) {
             ((ProgressViewHolder) holder).pv_load_more_indicator.setIndeterminate(true);
         }
@@ -110,13 +113,17 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         this.mOnLoadMoreListener = onLoadMoreListener;
     }
 
-    public void setMovieData(ArrayList<Movie> movies) {
-        mMovies = movies;
+    public void setMovieData(List<Movie> movies) {
+        if (movies == null) {
+            mMovies.clear();
+        } else {
+            mMovies.addAll(movies);
+        }
         notifyDataSetChanged();
     }
     public void addMovieData(Movie movie) {
         mMovies.add(movie);
-        notifyItemInserted(mMovies.size() - 1);
+        notifyDataSetChanged();
     }
     public void addMovies(List<Movie> movies) {
         for (Movie movie : movies) {
@@ -130,7 +137,10 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         mMovies.remove(position);
         notifyItemRemoved(mMovies.size());
     }
-
+    public void emptyMoviesData() {
+        mMovies = new ArrayList<>();
+        notifyDataSetChanged();
+    }
     public interface MovieAdapterOnClickHandler {
         void onClick(Movie movie);
     }

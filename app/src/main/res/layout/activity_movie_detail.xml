@@ -57,7 +57,6 @@
                 android:id="@+id/movie_detail_tv_synopsis"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/dummy_text"
                 android:lineSpacingMultiplier="1.5"
                 android:gravity="fill_horizontal"
                 />

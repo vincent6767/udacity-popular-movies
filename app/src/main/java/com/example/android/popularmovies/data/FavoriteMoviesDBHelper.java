@@ -11,7 +11,7 @@ import com.example.android.popularmovies.data.FavoriteMoviesContract.FavoriteMov
 public class FavoriteMoviesDBHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "favoriteMoviesDB.db";
 
-    private static final int VERSION = 1;
+    private static final int VERSION = 2;
 
 
     FavoriteMoviesDBHelper(Context context) {
@@ -23,7 +23,12 @@ public class FavoriteMoviesDBHelper extends SQLiteOpenHelper {
         final String CREATE_TABLE = "CREATE TABLE " + FavoriteMoviesEntry.TABLE_NAME + " (" +
                 FavoriteMoviesEntry._ID             + " INTEGER PRIMARY KEY, " +
                 FavoriteMoviesEntry.COLUMN_ID       + " INTEGER NOT NULL, " +
-                FavoriteMoviesEntry.COLUMN_TITLE    + " TEXT NOT NULL);";
+                FavoriteMoviesEntry.COLUMN_TITLE    + " TEXT NOT NULL, " +
+                FavoriteMoviesEntry.COLUMN_RELEASE_DATE    + " TEXT NOT NULL, " +
+                FavoriteMoviesEntry.COLUMN_POSTER_PATH    + " TEXT NOT NULL, " +
+                FavoriteMoviesEntry.COLUMN_USER_RATING    + " REAL NOT NULL, " +
+                FavoriteMoviesEntry.COLUMN_SYNOPSIS    + " TEXT NOT NULL, " +
+                FavoriteMoviesEntry.COLUMN_BACKDROP    + " TEXT NOT NULL);";
 
         sqLiteDatabase.execSQL(CREATE_TABLE);
     }

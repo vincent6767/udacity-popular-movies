@@ -23,8 +23,14 @@ public class FavoriteMoviesContract {
 
         public static final String COLUMN_ID = "movie_id";
         public static final String COLUMN_TITLE = "title";
+        public static final String COLUMN_POSTER_PATH = "poster_path";
+        public static final String COLUMN_RELEASE_DATE = "release_date";
+        public static final String COLUMN_USER_RATING = "vote_average";
+        public static final String COLUMN_SYNOPSIS = "overview";
+        public static final String COLUMN_BACKDROP = "backdrop_path";
         public static String getSqlSelectForAMovie() {
             return COLUMN_ID + " = ?";
         }
+
     }
 }
