@@ -31,6 +31,7 @@ import com.example.android.popularmovies.data.FavoriteMoviesContract.FavoriteMov
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.IllegalFormatCodePointException;
 import java.util.List;
 
 import retrofit2.Call;
@@ -41,7 +42,16 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         LoaderManager.LoaderCallbacks<Cursor> {
 
     private enum SORT_OPTION {
-        POPULARITY, TOP_RATED, FAVORITE_MOVIE
+        POPULARITY(0), TOP_RATED(1), FAVORITE_MOVIE(2);
+        private int numVal;
+
+        SORT_OPTION(int numVal) {
+            this.numVal = numVal;
+        }
+        public int getNumVal() {
+            return numVal;
+        }
+
     }
     private enum DATA_OPERATION {
         ADD, SET
@@ -51,6 +61,10 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final int FETCH_FAVORITE_MOVIES_LOADER = 100;
     private static final String LIST_STATE = "list_state";
+    private static final String PAGE_NUMBER_KEY = "page_number_key";
+    private static final String CURRENT_OPTION_KEY = "current_option";
+    private static final String LAST_POSITION_VIEW_KEY = "last_position_view";
+
     private int mPageNumber = 0;
 
     private static final String[] FAVORITE_MOVIES_COLUMNS = new String[] {
@@ -83,9 +97,24 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         pbLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
         tvErrorMessage = (TextView) findViewById(R.id.tv_error_message);
+
+        if (savedInstanceState != null) {
+            int savedOption = savedInstanceState.getInt(CURRENT_OPTION_KEY);
+            switch (savedOption) {
+                case 0:
+                    mCurrentOption = SORT_OPTION.POPULARITY;
+                    break;
+                case 1:
+                    mCurrentOption = SORT_OPTION.TOP_RATED;
+                    break;
+                case 2:
+                    mCurrentOption = SORT_OPTION.FAVORITE_MOVIE;
+                    break;
+            }
+            mPageNumber = savedInstanceState.getInt(PAGE_NUMBER_KEY);
+        }
         mCurrentOption = SORT_OPTION.POPULARITY;
 
         initViews();
@@ -349,6 +378,10 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mListState = rvMoviesList.getLayoutManager().onSaveInstanceState();
+        outState.putInt(PAGE_NUMBER_KEY, mPageNumber);
+        outState.putInt(CURRENT_OPTION_KEY, mCurrentOption.getNumVal());
+        int lastVisiblePosition = ((GridLayoutManager) rvMoviesList.getLayoutManager()).findLastVisibleItemPosition();
+        outState.putInt(LAST_POSITION_VIEW_KEY, lastVisiblePosition);
         outState.putParcelable(LIST_STATE, mListState);
     }
 
@@ -357,7 +390,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         super.onRestoreInstanceState(savedInstanceState);
 
         if (savedInstanceState != null) {
-            mListState = (Parcelable) savedInstanceState.get(LIST_STATE);
+            mListState = savedInstanceState.getParcelable(LIST_STATE);
         }
     }
 }
