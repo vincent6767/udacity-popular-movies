@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private static final String PAGE_NUMBER_KEY = "page_number_key";
     private static final String CURRENT_OPTION_KEY = "current_option";
     private static final String LAST_POSITION_VIEW_KEY = "last_position_view";
+    private static final String MOVIES_LIST = "movies_list";
 
     private int mPageNumber = 0;
 
@@ -100,6 +101,10 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         pbLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
         tvErrorMessage = (TextView) findViewById(R.id.tv_error_message);
 
+        initViews();
+        initListeners();
+        initService();
+
         if (savedInstanceState != null) {
             int savedOption = savedInstanceState.getInt(CURRENT_OPTION_KEY);
             switch (savedOption) {
@@ -114,14 +119,18 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                     break;
             }
             mPageNumber = savedInstanceState.getInt(PAGE_NUMBER_KEY);
+            mAdapter.setMovieDataFromParceableList((savedInstanceState.getParcelableArrayList(MOVIES_LIST)));
+            restoreLayoutManagerPosition();
+        } else {
+            // Default action.
+            mCurrentOption = SORT_OPTION.POPULARITY;
+            fetchMoviesData(mCurrentOption, DATA_OPERATION.SET);
         }
-        mCurrentOption = SORT_OPTION.POPULARITY;
-
-        initViews();
-        initListeners();
-        initService();
-        // Initialize movies list.
-        fetchMoviesData(mCurrentOption, DATA_OPERATION.SET);
+    }
+    private void restoreLayoutManagerPosition() {
+        if (mListState != null) {
+            rvMoviesList.getLayoutManager().onRestoreInstanceState(mListState);
+        }
     }
     private void initViews() {
         rvMoviesList = (RecyclerView) findViewById(R.id.rv_movies);
@@ -140,7 +149,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             @Override
             public void onLoadMore() {
                 if (mCurrentOption == SORT_OPTION.POPULARITY || mCurrentOption == SORT_OPTION.TOP_RATED) {
-                    Log.d(LOG_TAG, mCurrentOption.toString());
                     // So the adapter will check view_type and show progress bar at bottom.
                     mAdapter.addMovieData(null);
 
@@ -157,13 +165,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     @Override
     protected void onResume() {
         super.onResume();
-        if (mListState != null) {
-            rvMoviesList.getLayoutManager().onRestoreInstanceState(mListState);
-            mListState = null;
-        } else {
-            if (mCurrentOption == SORT_OPTION.FAVORITE_MOVIE) {
-                fetchFavoriteMovies();
-            }
+        if (mCurrentOption == SORT_OPTION.FAVORITE_MOVIE) {
+            fetchFavoriteMovies();
         }
     }
 
@@ -358,7 +361,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                             data.getString(INDEX_COLUMN_SYNOPSIS),
                             data.getString(INDEX_COLUMN_BACKDROP)
                     );
-                    Log.d(LOG_TAG, movie.getThumbnailImageUrl());
                     movies.add(movie);
                 }
             } finally {
@@ -380,17 +382,15 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         mListState = rvMoviesList.getLayoutManager().onSaveInstanceState();
         outState.putInt(PAGE_NUMBER_KEY, mPageNumber);
         outState.putInt(CURRENT_OPTION_KEY, mCurrentOption.getNumVal());
-        int lastVisiblePosition = ((GridLayoutManager) rvMoviesList.getLayoutManager()).findLastVisibleItemPosition();
-        outState.putInt(LAST_POSITION_VIEW_KEY, lastVisiblePosition);
         outState.putParcelable(LIST_STATE, mListState);
+        outState.putParcelableArrayList(MOVIES_LIST, (ArrayList<Movie>) mAdapter.getAllMovies());
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-
         if (savedInstanceState != null) {
             mListState = savedInstanceState.getParcelable(LIST_STATE);
         }
+        super.onRestoreInstanceState(savedInstanceState);
     }
 }

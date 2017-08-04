@@ -1,5 +1,8 @@
 package com.example.android.popularmovies.entities;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.text.DateFormat;
@@ -10,7 +13,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-public class Movie {
+public class Movie implements Parcelable {
     private static final String TMDB_IMAGE_PATH = "http://image.tmdb.org/t/p/w185";
     private static final String dateFormat = "yyyy-mm-dd";
 
@@ -30,6 +33,17 @@ public class Movie {
 
     public Movie() {
         super();
+    }
+
+    // Parcelling Part
+    public Movie(Parcel in) {
+        this.id = in.readInt();
+        this.title = in.readString();
+        this.thumbnailImageUrl = in.readString();
+        this.releaseDate = in.readString();
+        this.userRating = in.readFloat();
+        this.synopsis = in.readString();
+        this.backdrop = in.readString();
     }
     public Movie(int id, String title, String thumbnailImageUrl, String releaseDate, float userRating, String synopsis, String backdrop) {
         this.id = id;
@@ -111,5 +125,31 @@ public class Movie {
 
     public int getId() {
         return id;
+    }
+
+    public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>(){
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
+
+
+    @Override
+    public int describeContents() {
+        return this.hashCode();
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
+        parcel.writeString(title);
+        parcel.writeString(thumbnailImageUrl);
+        parcel.writeString(releaseDate);
+        parcel.writeFloat(userRating);
+        parcel.writeString(synopsis);
+        parcel.writeString(backdrop);
     }
 }

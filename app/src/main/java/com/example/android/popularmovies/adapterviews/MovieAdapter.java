@@ -1,6 +1,7 @@
 package com.example.android.popularmovies.adapterviews;
 
 import android.content.Context;
+import android.os.Parcelable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -121,6 +122,16 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
         notifyDataSetChanged();
     }
+    public void setMovieDataFromParceableList(List<Parcelable> movies) {
+        if (movies == null) {
+            mMovies.clear();
+        } else {
+            for (Parcelable movie : movies) {
+                mMovies.add((Movie) movie);
+            }
+        }
+        notifyDataSetChanged();
+    }
     public void addMovieData(Movie movie) {
         mMovies.add(movie);
         notifyDataSetChanged();
@@ -140,6 +151,9 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void emptyMoviesData() {
         mMovies = new ArrayList<>();
         notifyDataSetChanged();
+    }
+    public List<Movie> getAllMovies() {
+        return mMovies;
     }
     public interface MovieAdapterOnClickHandler {
         void onClick(Movie movie);
