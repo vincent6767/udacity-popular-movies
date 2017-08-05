@@ -36,7 +36,6 @@ import com.example.android.popularmovies.networkutils.NoConnectivityException;
 import com.example.android.popularmovies.themoviedb.MoviesService;
 import com.example.android.popularmovies.themoviedb.TheMovieDB;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;

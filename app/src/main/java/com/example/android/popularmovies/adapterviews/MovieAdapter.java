@@ -16,7 +16,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.android.popularmovies.listeners.OnLoadMoreListener;
 import com.example.android.popularmovies.R;
 import com.example.android.popularmovies.entities.Movie;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
