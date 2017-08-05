@@ -67,12 +67,19 @@
             />
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_movie_trailers"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scrollbars="none"
+                />
+            <TextView
+                android:id="@+id/tv_videos_error_message"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/meta_data_component_margin"
+                android:gravity="center"
                 />
         </FrameLayout>
 
@@ -82,12 +89,19 @@
             />
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_movie_reviews"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scrollbars="none"
+                />
+            <TextView
+                android:id="@+id/tv_reviews_error_message"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/meta_data_component_margin"
+                android:gravity="center"
                 />
         </FrameLayout>
     </LinearLayout>

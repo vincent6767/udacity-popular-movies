@@ -17,11 +17,14 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.android.popularmovies.adapterviews.ReviewsAdapter;
 import com.example.android.popularmovies.adapterviews.VideosAdapter;
 import com.example.android.popularmovies.entities.Movie;
@@ -36,6 +39,7 @@ import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import retrofit2.Call;
@@ -65,8 +69,10 @@ public class MovieDetailActivity extends AppCompatActivity implements
 
     private MoviesService mMovieService;
     private RecyclerView mReviewsRecyclerView;
+    private TextView mErrorReviewsView;
     private ReviewsAdapter mReviewsAdapter;
     private VideosAdapter mVideosAdapter;
+    private TextView mErrorVideosViews;
     private RecyclerView mVideosRecyclerView;
     private Movie mMovie;
 
@@ -93,7 +99,10 @@ public class MovieDetailActivity extends AppCompatActivity implements
 
                 rbUserRating.setRating(mMovie.getUserRating());
                 tvSynopsis.setText(mMovie.getSynopsis());
-                Picasso.with(getApplicationContext()).load(mMovie.getFullThumbnailImageUrl()).into(ivThumbnail);
+                Glide.with(getApplicationContext()).load(mMovie.getFullThumbnailImageUrl()).thumbnail(0.5f)
+                        .crossFade()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .into(ivThumbnail);
                 bar.setTitle(mMovie.getTitle());
 
                 initViews();
@@ -105,22 +114,23 @@ public class MovieDetailActivity extends AppCompatActivity implements
         if (bar != null) {
             bar.setDisplayHomeAsUpEnabled(true);
         }
-        // Do nothing if there no movie is passed.
     }
     private void initViews() {
+        mErrorReviewsView = (TextView) findViewById(R.id.tv_reviews_error_message);
         LinearLayoutManager reviewsLayoutManager = new LinearLayoutManager(this);
         mReviewsRecyclerView = (RecyclerView) findViewById(R.id.rv_movie_reviews);
         mReviewsRecyclerView.setHasFixedSize(true);
         mReviewsRecyclerView.setLayoutManager(reviewsLayoutManager);
 
+        mErrorVideosViews = (TextView) findViewById(R.id.tv_videos_error_message);
         LinearLayoutManager videoLayoutManager = new LinearLayoutManager(this);
         mVideosRecyclerView = (RecyclerView) findViewById(R.id.rv_movie_trailers);
         mVideosRecyclerView.setHasFixedSize(true);
         mVideosRecyclerView.setLayoutManager(videoLayoutManager);
 
         mVideosAdapter = new VideosAdapter(this, new ArrayList<Video>(), this);
-
         mVideosRecyclerView.setAdapter(mVideosAdapter);
+
         mReviewsAdapter = new ReviewsAdapter(this, new ArrayList<Review>());
         mReviewsRecyclerView.setAdapter(mReviewsAdapter);
     }
@@ -134,8 +144,13 @@ public class MovieDetailActivity extends AppCompatActivity implements
         Callback<VideosResult> callback = new Callback<VideosResult>() {
             @Override
             public void onResponse(Call<VideosResult> call, Response<VideosResult> response) {
-                VideosResult videosResult = response.body();
-                mVideosAdapter.setVideos(videosResult.getTrailerVideos());
+                List<Video> videos = response.body().getResults();
+                if (videos.size() > 0) {
+                    showVideos();
+                    mVideosAdapter.setVideos(videos);
+                } else {
+                    showErrorVideosMessage("No videos");
+                }
             }
 
             @Override
@@ -155,8 +170,13 @@ public class MovieDetailActivity extends AppCompatActivity implements
         Callback<ReviewsResult> callback = new Callback<ReviewsResult>() {
             @Override
             public void onResponse(Call<ReviewsResult> call, Response<ReviewsResult> response) {
-                ReviewsResult reviewsResult = response.body();
-                mReviewsAdapter.setReviews(reviewsResult.getResults());
+                List<Review> reviews = response.body().getResults();
+                if (reviews.size() > 0) {
+                    showReviews();
+                    mReviewsAdapter.setReviews(reviews);
+                } else {
+                    showErrorReviewsMessage("No reviews");
+                }
             }
 
             @Override
@@ -170,7 +190,26 @@ public class MovieDetailActivity extends AppCompatActivity implements
         // Asynchronous request so our UI won't freeze.
         call.enqueue(callback);
     }
-
+    private void showReviews() {
+        mErrorReviewsView.setVisibility(View.INVISIBLE);
+        mReviewsRecyclerView.setVisibility(View.VISIBLE);
+    }
+    private void showErrorReviewsMessage(String errorMessage) {
+        Log.d(LOG_TAG, errorMessage);
+        mErrorReviewsView.setText(errorMessage);
+        mErrorReviewsView.setVisibility(View.VISIBLE);
+        mReviewsRecyclerView.setVisibility(View.INVISIBLE);
+    }
+    private void showVideos() {
+        mErrorVideosViews.setVisibility(View.INVISIBLE);
+        mVideosRecyclerView.setVisibility(View.VISIBLE);
+    }
+    private void showErrorVideosMessage(String errorMessage) {
+        Log.d(LOG_TAG, errorMessage);
+        mErrorVideosViews.setText(errorMessage);
+        mErrorVideosViews.setVisibility(View.VISIBLE);
+        mVideosRecyclerView.setVisibility(View.INVISIBLE);
+    }
     private void onConnectivityException(String errMessage) {
         // TODO: Show error message in the box.
         Toast.makeText(this, errMessage, Toast.LENGTH_LONG).show();

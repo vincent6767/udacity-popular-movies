@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.android.popularmovies.listeners.OnLoadMoreListener;
 import com.example.android.popularmovies.R;
 import com.example.android.popularmovies.entities.Movie;
@@ -95,7 +97,11 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof MovieViewHolder) {
             ((MovieViewHolder) holder).tv_release_date.setText(String.valueOf(mMovies.get(position).getYearReleaseDate()));
-            Picasso.with(mContext).load(mMovies.get(position).getFullThumbnailImageUrl()).into(((MovieViewHolder) holder).iv_movie_thumbnail);
+            Glide.with(mContext).load(mMovies.get(position).getFullThumbnailImageUrl())
+                    .thumbnail(0.5f)
+                    .crossFade()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(((MovieViewHolder) holder).iv_movie_thumbnail);
         } else if (holder instanceof ProgressViewHolder) {
             ((ProgressViewHolder) holder).pv_load_more_indicator.setIndeterminate(true);
         }

@@ -21,6 +21,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.android.popularmovies.adapterviews.MovieAdapter;
+import com.example.android.popularmovies.layoututils.GridLayoutUtil;
 import com.example.android.popularmovies.listeners.OnLoadMoreListener;
 import com.example.android.popularmovies.entities.Movie;
 import com.example.android.popularmovies.networkutils.NoConnectivityException;
@@ -63,7 +64,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private static final String LIST_STATE = "list_state";
     private static final String PAGE_NUMBER_KEY = "page_number_key";
     private static final String CURRENT_OPTION_KEY = "current_option";
-    private static final String LAST_POSITION_VIEW_KEY = "last_position_view";
     private static final String MOVIES_LIST = "movies_list";
 
     private int mPageNumber = 0;
@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private void initViews() {
         rvMoviesList = (RecyclerView) findViewById(R.id.rv_movies);
         rvMoviesList.setHasFixedSize(true);
-        int mNumberOfCols = getResources().getInteger(R.integer.gallery_columns);
+        int mNumberOfCols = GridLayoutUtil.calculateNumberOfColumns(getApplicationContext());
         GridLayoutManager layoutManager = new GridLayoutManager(this, mNumberOfCols);
         rvMoviesList.setLayoutManager(layoutManager);
 
